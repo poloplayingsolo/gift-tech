@@ -1,9 +1,11 @@
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
-  const account = useAccount()
-  const { connectors, connect, status, error } = useConnect()
-  const { disconnect } = useDisconnect()
+  const account = useAccount();
+  const { connectors, connect, status, error } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { loginWithRedirect } = useAuth0();
 
   return (
     <>
@@ -18,13 +20,16 @@ function App() {
           chainId: {account.chainId}
         </div>
 
-        {account.status === 'connected' && (
+        {account.status === "connected" && (
           <button type="button" onClick={() => disconnect()}>
             Disconnect
           </button>
         )}
       </div>
 
+      <div>
+        <button onClick={() => loginWithRedirect()}>Log In</button>;
+      </div>
       <div>
         <h2>Connect</h2>
         {connectors.map((connector) => (
@@ -40,7 +45,7 @@ function App() {
         <div>{error?.message}</div>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

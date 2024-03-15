@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@tanstack/react-query": "5.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "simple-git-hooks": "^2.10.0",
     "viem": "latest",
     "wagmi": "latest"
   },
@@ -25,5 +27,8 @@
     "buffer": "^6.0.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.9"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm format && pnpm lint:fix"
   }
 }
