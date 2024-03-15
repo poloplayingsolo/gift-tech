@@ -1,5 +1,6 @@
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "@/components/ui/button";
 
 function App() {
   const account = useAccount();
@@ -21,9 +22,9 @@ function App() {
         </div>
 
         {account.status === "connected" && (
-          <button type="button" onClick={() => disconnect()}>
+          <Button type="button" onClick={() => disconnect()}>
             Disconnect
-          </button>
+          </Button>
         )}
       </div>
 
@@ -33,13 +34,13 @@ function App() {
       <div>
         <h2>Connect</h2>
         {connectors.map((connector) => (
-          <button
+          <Button
             key={connector.uid}
             onClick={() => connect({ connector })}
             type="button"
           >
             {connector.name}
-          </button>
+          </Button>
         ))}
         <div>{status}</div>
         <div>{error?.message}</div>
