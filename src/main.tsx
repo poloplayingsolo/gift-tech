@@ -4,9 +4,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { WagmiProvider } from "wagmi";
+import "@rainbow-me/rainbowkit/styles.css";
+import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
 
 import App from "./App.tsx";
-import { config } from "./wagmi.ts";
 
 import "./globals.css";
 import "./index.css";
@@ -24,9 +26,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         redirect_uri: window.location.origin,
       }}
     >
-      <WagmiProvider config={config}>
+      <WagmiProvider
+        config={getDefaultConfig({
+          appName: "gifttech",
+          projectId: "2d81615423246e5944454fb8f86d9cb0",
+          chains: [mainnet, polygon, optimism, arbitrum, base, zora],
+        })}
+      >
         <QueryClientProvider client={queryClient}>
-          <App />
+          <RainbowKitProvider>
+            <App />
+          </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
     </Auth0Provider>
