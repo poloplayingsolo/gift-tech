@@ -2,8 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Buffer } from "buffer";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Auth0Provider } from "@auth0/auth0-react";
 import { WagmiProvider } from "wagmi";
+import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
@@ -19,12 +19,11 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Auth0Provider
-      domain="dev-wexspgfc.us.auth0.com"
-      clientId="ldCFdEkFAn5S1Xlp5RNQmrikaI50iVzh"
-      authorizationParams={{
-        redirect_uri: window.location.origin,
-      }}
+    <KindeProvider
+      clientId="2ef757ca520c4a59953b1300e20a5579"
+      domain="https://gifttech.kinde.com"
+      redirectUri="http://localhost:5173"
+      logoutUri="http://localhost:5173"
     >
       <WagmiProvider
         config={getDefaultConfig({
@@ -39,6 +38,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
-    </Auth0Provider>
+    </KindeProvider>
   </React.StrictMode>
 );
