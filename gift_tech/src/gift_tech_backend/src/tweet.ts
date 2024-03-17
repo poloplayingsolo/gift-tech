@@ -1,7 +1,11 @@
 import { None, Some, ic } from "azle";
 import { managementCanister } from "azle/canisters/management";
 
-const TWEET_REGEX = /GiftTech (0x[A-f0-9]{40}):(1)/g; // GiftTech 0xblabalbal:1
+/**
+ * Tweet content example:
+ * I am claiming gift to 0x1234567890123456789012345678901234567890
+ */
+const TWEET_REGEX = /I am claiming gift to (0x[A-f0-9]{40})/g;
 const TWEET_PARSER_URL =
   "https://goldfish-app-shmeu.ondigitalocean.app/content";
 
@@ -29,12 +33,11 @@ export async function getTweetContent(twitterHandle: string, tweetId: string) {
   const tweetContent = await fetchTweetContent(twitterHandle, tweetId);
 
   const execResult = TWEET_REGEX.exec(tweetContent);
-  if (execResult === null || execResult.length != 3) {
+  if (execResult === null || execResult.length != 2) {
     return ic.trap("Invalid tweet content");
   }
 
   return {
-    giftReceiverAddress: execResult[1],
-    giftIndex: Number(execResult[2]),
+    receiverAddress: execResult[1],
   };
 }

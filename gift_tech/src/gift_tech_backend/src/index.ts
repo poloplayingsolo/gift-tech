@@ -15,7 +15,7 @@ import { getTweetContent } from "./tweet";
 
 /**
  * @todo
- * - add tweet parsing logic
+ * - [x] add tweet parsing logic
  * - add transaction signing logic
  * - add rpc send_raw_tx logic
  * - add token balance logic
@@ -30,7 +30,7 @@ const Gift = Record({
   receiver: text,
   message: text,
   tokenAddress: text,
-  tokenId: nat64,
+  tokenId: text,
 });
 
 type Gift = typeof Gift.tsType;
@@ -48,35 +48,37 @@ export default Canister({
       publicKey: publicKeyResult.public_key,
     };
   }),
-  claimGift: update([text, text], text, async (twitterHandle, tweetId) => {
-    const userGifts = usersGiftsState.get(twitterHandle);
-    if ("None" in userGifts) {
-      return ic.trap("User does not exist");
-    } // check if user exists
+  claimGift: update(
+    [text, text, text, text],
+    text,
+    async (twitterHandle, tweetId, tokenAddress, tokenId) => {
+      const userGifts = usersGiftsState.get(twitterHandle);
 
-    const { giftReceiverAddress, giftIndex } = await getTweetContent(
-      twitterHandle,
-      tweetId
-    );
+      if ("None" in userGifts) {
+        return ic.trap("User does not exist");
+      }
 
-    const giftToClaim = userGifts.Some[giftIndex];
-    if (!giftToClaim) {
-      return ic.trap("Gift does not exist");
-    } // check if gift exists
+      const { receiverAddress } = await getTweetContent(twitterHandle, tweetId);
 
-    /* Implement transaction signing and send of the gift here... */
+      const giftToClaim = userGifts.Some.find(
+        (gift) =>
+          gift.tokenAddress === tokenAddress &&
+          BigInt(gift.tokenId) === BigInt(tokenId)
+      );
 
-    return `Sending Gift to ${giftReceiverAddress}: ${giftToClaim.message}, ${giftToClaim.tokenAddress}, ${giftToClaim.tokenId}`; //tx hash
-  }),
+      if (!giftToClaim) {
+        return ic.trap("No such gift for this user");
+      }
+
+      /* Implement transaction signing and send of the gift here... */
+
+      return `Sending Gift to ${receiverAddress}: ${giftToClaim.message}, ${giftToClaim.tokenAddress}, ${giftToClaim.tokenId}`; //tx hash
+    }
+  ),
   createGift: update(
-    [text, text, text, nat64],
+    [text, text, text, text],
     Gift,
-    (
-      twitterHandle: text,
-      message: text,
-      tokenAddress: text,
-      tokenId: nat64
-    ) => {
+    (twitterHandle: text, message: text, tokenAddress: text, tokenId: text) => {
       let userGifts = usersGiftsState.get(twitterHandle);
 
       /* Add logic for validating that validates the gift is already on our account */
