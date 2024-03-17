@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import swal from "sweetalert";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,22 +15,40 @@ import {
 } from "@/components/ui/form";
 import { useHistoryState } from "wouter/use-browser-location";
 import { useAccountNFTs } from "@/hooks/useAccountNFTs";
+import { useSendNFTToCanister } from "@/hooks/useSendNFTToCanister";
+import { canister } from "@/canister";
 
 const formSchema = z.object({
   wishes: z.string(),
 });
 
 export function CreateGiftWishes() {
-  const _nfts = useAccountNFTs();
+  const [sendNFTToCanister, sendNFTToCanisterLoading] = useSendNFTToCanister();
+  const nfts = useAccountNFTs();
   const history = useHistoryState<{ xHandle: string; nftID: string }>();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const data = { ...history, ...values };
-    alert(JSON.stringify(data));
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const nft = nfts.find((nft) => nft.id === history.nftID);
+    if (!nft)
+      throw new Error("No NFT in history list, steps are broken probably");
+
+    try {
+      await sendNFTToCanister(nft.contractAddress, nft.tokenId);
+      await canister.pushGift(
+        nft.contractAddress,
+        nft.tokenId,
+        history.xHandle,
+        values.wishes
+      );
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        swal("Oops", e.message, "error");
+      }
+    }
   }
 
   return (
@@ -58,8 +77,12 @@ export function CreateGiftWishes() {
                       )}
                     />
 
-                    <Button type="submit" className="mt-3">
-                      Sign
+                    <Button
+                      disabled={sendNFTToCanisterLoading}
+                      type="submit"
+                      className="mt-3"
+                    >
+                      {sendNFTToCanisterLoading ? "Loading..." : "Transfer"}
                     </Button>
                   </div>
                 </div>
