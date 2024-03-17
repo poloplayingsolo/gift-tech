@@ -1,0 +1,20 @@
+{
+  "canisters": {
+    "gift_tech_backend": {
+      "build": "npx azle gift_tech_backend",
+      "candid": "src/gift_tech_backend/gift_tech_backend.did",
+      "gzip": true,
+      "main": "src/gift_tech_backend/src/index.ts",
+      "type": "custom",
+      "wasm": ".azle/gift_tech_backend/gift_tech_backend.wasm"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
