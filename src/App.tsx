@@ -12,7 +12,7 @@ function App() {
       <Switch>
         <Route path="/" component={CreateGift} />
         <Route path="/create-choose-asset" component={CreateGiftChooseAssetPage} />
-        <Route path="/CreateGiftWishesPage" component={CreateGiftWishesPage} />
+        <Route path="/create-wishes" component={CreateGiftWishesPage} />
         <Route path="/CreateGiftCopyLinkPage" component={CreateGiftCopyLinkPage} />
 
         <Route path="/other" component={OtherPage} />

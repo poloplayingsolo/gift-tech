@@ -21,22 +21,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useLocation } from "wouter";
 
 const formSchema = z.object({
-  xHandle: z.string(),
+  xHandle: z.string().startsWith("@"),
   nftID: z.string(),
 });
 
 export function CreateGiftChooseAsset() {
   const nfts = useAccountNFTs();
+  const [_location, setLocation] = useLocation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("HERE");
-    console.log(values);
+    setLocation("/create-wishes", { state: values });
   }
 
   return (
