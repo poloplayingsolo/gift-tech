@@ -2,6 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import swal from "sweetalert";
+import { useLocation } from "wouter";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +27,7 @@ export function CreateGiftWishes() {
   const [sendNFTToCanister, sendNFTToCanisterLoading] = useSendNFTToCanister();
   const nfts = useAccountNFTs();
   const history = useHistoryState<{ xHandle: string; nftID: string }>();
+  const [_location, setLocation] = useLocation();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,6 +46,11 @@ export function CreateGiftWishes() {
         history.xHandle,
         values.wishes
       );
+      setLocation("/create-copy-link", { state: {
+        contractAddress: nft.contractAddress,
+        tokenId: nft.tokenId,
+        xHandle: history.xHandle,
+      }});
     } catch (e: unknown) {
       if (e instanceof Error) {
         swal("Oops", e.message, "error");
