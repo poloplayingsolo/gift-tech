@@ -1,3 +1,5 @@
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import { useHistoryState } from "wouter/use-browser-location";
@@ -9,7 +11,7 @@ export function CreateGiftCopyLink() {
     xHandle: string;
   }>();
 
-  const link = `${window.location.origin}/claim?contractAddress=${history.contractAddress}&tokenId=${history.tokenId.toString()}&xHandle=${history.xHandle}`;
+  const link = `${window.location.origin}/claim-post?contractAddress=${history.contractAddress}&tokenId=${history.tokenId.toString()}&xHandle=${history.xHandle}`;
 
   return (
     <div>
@@ -24,7 +26,9 @@ export function CreateGiftCopyLink() {
                 <p className="leading-7">
                   Copy link below and share with your friend
                 </p>
-                <Button className="mt-3">Copy Link</Button>
+                <CopyToClipboard text={link}>
+                  <Button className="mt-3">Copy Link</Button>
+                </CopyToClipboard>
               </div>
               <p className="text-sm font-light text-muted-foreground mt-5">
                 Or copy link: <br />

@@ -12,18 +12,35 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLocation, useSearch } from "wouter";
 
 const formSchema = z.object({
-  postURL: z.string().startsWith("https://x.com/"),
+  postURL: z
+    .string()
+    .startsWith("https://x.com/")
+    .or(z.string().startsWith("https://twitter.com")),
 });
 
 export function ClaimGiftPost() {
+  const search = useSearch();
+  const [_, setLocation] = useLocation();
+
+  const params = new URLSearchParams(search);
+  const xHandle = params.get("xHandle");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    alert("test");
+    setLocation("/claim", {
+      state: {
+        postURL: values.postURL,
+        xHandle,
+        contractAddress: params.get("contractAddress"),
+        tokenId: params.get("tokenId"),
+      },
+    });
   }
 
   return (
@@ -40,7 +57,7 @@ export function ClaimGiftPost() {
                   />
                   <div>
                     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-                      Hi, @PLuchkovskyi !
+                      Hi, {xHandle} !
                     </h4>
                     <p className="leading-5 mt-1">
                       This gift is connected to your X account. You need to post
@@ -49,16 +66,19 @@ export function ClaimGiftPost() {
                   </div>
                 </div>
                 <div className="grid w-full items-center gap-1.5">
-                <Button className="mt-7 shadow-none" variant={"outline"}>
-                  Post Tweet <img className="inline ml-1" src="/x.svg" />
-                </Button>
-              </div>
+                  <Button
+                    className="mt-7 shadow-none"
+                    variant={"outline"}
+                    onClick={() => {
+                      window.open("https://twitter.com/home", "_blank");
+                    }}
+                  >
+                    Post Tweet <img className="inline ml-1" src="/x.svg" />
+                  </Button>
+                </div>
               </div>
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="mt-5"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5">
                   <FormField
                     control={form.control}
                     name="postURL"

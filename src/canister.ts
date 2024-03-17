@@ -17,6 +17,16 @@ class Canister {
     console.log("GIFT PUSHED", contractAddress, tokenId, xHandle, wishes);
     await delay();
   }
+
+  async claimGift(
+    contractAddress: string,
+    tokenId: bigint,
+    xHandle: string,
+    postId: string,
+  ) {
+    console.log("GIFT CLAIMED", contractAddress, tokenId, xHandle, postId);
+    await delay();
+  }
 }
 
 export const canister = new Canister();

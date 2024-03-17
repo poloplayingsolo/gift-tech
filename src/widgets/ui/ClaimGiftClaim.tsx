@@ -1,30 +1,57 @@
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState, useCallback } from "react";
 
-const formSchema = z.object({
-  postURL: z.string().startsWith("https://x.com/"),
-});
+import { Button } from "@/components/ui/button";
+import { useHistoryState } from "wouter/use-browser-location";
+import type { NFT } from "@/hooks/useAccountNFTs";
+import { alchemy } from "@/alchemy";
+import { canister } from "@/canister";
 
 export function ClaimGiftClaim() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
+  const state = useHistoryState<{
+    postURL: string;
+    xHandle: string;
+    contractAddress: `0x${string}`;
+    tokenId: bigint;
+  }>();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    alert("test");
-  }
+  const [claimed, setClaimed] = useState(false);
+  const [claiming, setClaiming] = useState(false);
+  const [nft, setNFT] = useState<NFT | null>(null);
+
+  const claim = async () => {
+    const splitted = state.postURL.split("/");
+    const postId = splitted[splitted.length - 1];
+
+    setClaiming(true);
+    await canister.claimGift(
+      state.contractAddress,
+      state.tokenId,
+      state.xHandle,
+      postId
+    );
+
+    setClaiming(false);
+    setClaimed(true);
+  };
+
+  const fetchNFTMetadata = useCallback(async () => {
+    const metadata = await alchemy.nft.getNftMetadata(
+      state.contractAddress,
+      state.tokenId
+    );
+
+    setNFT({
+      id: metadata.contract.address + metadata.tokenId,
+      tokenId: BigInt(metadata.tokenId),
+      imageUrl: metadata.image.pngUrl,
+      contractAddress: metadata.contract.address as `0x${string}`,
+      name: metadata.name,
+    });
+  }, [state]);
+
+  useEffect(() => {
+    fetchNFTMetadata();
+  }, [fetchNFTMetadata]);
 
   return (
     <div>
@@ -36,27 +63,32 @@ export function ClaimGiftClaim() {
                 Congratulations 🎉
               </h2>
               <div className="border-b white-card p-3 mx-auto max-w-56 mt-5 center">
-                <img
-                  className="inline"
-                  src="https://i.seadn.io/gae/GJy0XMbVQe2eISnPxNOJ9K2cyVbGV_GNu2wkgKvumRoZQRqfWKFplamchBxoSgoO_JBLXHp2oHEW5MLtoIOp6r59u15KSGaanj0CBQ?auto=format&dpr=1&w=384"
-                />
+                <img alt="nft" className="inline" src={nft?.imageUrl} />
               </div>
               <h4 className="scroll-m-20 text-xl mt-3 font-semibold tracking-tight">
-                You got Bored Ape Yacht Club #9996
+                You got {nft?.name} #{nft?.tokenId.toString()}
               </h4>
               <div className="border-b white-card text-left px-4 mt-5 py-5 sm:px-6">
-                Hi, @ReceiverNickname! <br />
+                Hi, {state.xHandle} <br />
+                <br />I gift you this {nft?.name} #{nft?.tokenId.toString()}
                 <br />
-                I, @SenderNickname gift you this Bored Ape Yacht Club #9996
                 wishes
               </div>
 
               <div className="flex mt-4 space-x-2">
-                <Button className="w-full" variant={"outline"}>
-                  Check on Opensea
-                </Button>
-                <Button type="submit" className="w-full">
-                  Claim
+                <Button
+                  onClick={() => {
+                    claim();
+                  }}
+                  type="submit"
+                  className="w-full"
+                  disabled={claimed || claiming}
+                >
+                  {claimed
+                    ? "Claimed! Check out your wallet 🎉"
+                    : claiming
+                      ? "Loading..."
+                      : "Claim"}
                 </Button>
               </div>
             </div>
