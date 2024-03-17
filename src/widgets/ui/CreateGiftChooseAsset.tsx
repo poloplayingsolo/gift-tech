@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useNFTs } from "@/hooks/useNFTs";
+import { useAccountNFTs } from "@/hooks/useAccountNFTs";
 import {
   Form,
   FormControl,
@@ -28,7 +28,7 @@ const formSchema = z.object({
 });
 
 export function CreateGiftChooseAsset() {
-  const nfts = useNFTs();
+  const nfts = useAccountNFTs();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

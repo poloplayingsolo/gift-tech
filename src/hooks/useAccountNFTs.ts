@@ -9,7 +9,7 @@ export interface NFT {
   contractAddress: `0x${string}`;
 }
 
-export function useNFTs(): NFT[] {
+export function useAccountNFTs(): NFT[] {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const account = useAccount();
 
