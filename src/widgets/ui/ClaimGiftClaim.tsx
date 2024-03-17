@@ -65,7 +65,8 @@ export function ClaimGiftClaim() {
               <div className="border-b white-card p-3 mx-auto max-w-56 mt-5 center">
                 <img
                   className="inline"
-                  src="https://i.seadn.io/gae/oOxrPSqIusE3pR1vLRSTQwfn52LnwnsZ_a1nCXked6fwOHrOnhvMBM1uMpshUb8Q4lL-gnlV9YoteT9cXnDgIsz46Zkbo7CImK-yKw?auto=format&dpr=1&w=1000"
+                  src={nft?.imageUrl}
+                  alt="nft"
                 />
               </div>
               <h4 className="scroll-m-20 text-xl mt-3 font-semibold tracking-tight">

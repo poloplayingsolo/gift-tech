@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
 @layer base {
   :root {
     --background: 20 0% 100%;
@@ -72,25 +80,26 @@ button {
   padding: 8px 16px;
 }
 
-input, .input {
+input,
+.input {
   border-radius: 25px;
-  border: 1px solid #F0F0EF;
+  border: 1px solid #f0f0ef;
   height: 44px;
   width: 100%;
 }
 
 textarea {
   border-radius: 25px;
-  border: 1px solid #F0F0EF;
+  border: 1px solid #f0f0ef;
 }
 
 .white-card {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 12px;
   border: 1px solid #000;
 }
 
 .custom-white-border {
   border-radius: 14px;
-  border: 10px solid #FFF;
+  border: 10px solid #fff;
 }

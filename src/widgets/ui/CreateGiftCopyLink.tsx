@@ -32,7 +32,7 @@ export function CreateGiftCopyLink() {
               </div>
               <p className="text-sm font-light text-muted-foreground mt-5">
                 Or copy link: <br />
-                <span className="underline max-w-[480px]">{link}</span>
+                <div><span className="underline break-all">{link}</span></div>
               </p>
             </div>
           </div>

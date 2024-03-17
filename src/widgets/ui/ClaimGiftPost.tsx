@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLocation, useSearch } from "wouter";
+import { useAccount } from "wagmi";
 
 const formSchema = z.object({
   postURL: z
@@ -22,6 +23,7 @@ const formSchema = z.object({
 });
 
 export function ClaimGiftPost() {
+  const account = useAccount();
   const search = useSearch();
   const [_, setLocation] = useLocation();
 
@@ -52,6 +54,7 @@ export function ClaimGiftPost() {
               <div className="border-b white-card text-left px-4 py-5 sm:px-6">
                 <div className="flex flex-row">
                   <img
+                    alt="x"
                     className="inline mr-3  mt-1 self-start"
                     src="/x-black-bg.svg"
                   />
@@ -70,7 +73,12 @@ export function ClaimGiftPost() {
                     className="mt-7 shadow-none"
                     variant={"outline"}
                     onClick={() => {
-                      window.open("https://twitter.com/home", "_blank");
+                      const text = `I am claiming gift to ${account.address}`;
+
+                      window.open(
+                        "http://twitter.com/intent/tweet?text=" + text,
+                        "_blank"
+                      );
                     }}
                   >
                     Post Tweet <img className="inline ml-1" src="/x.svg" />

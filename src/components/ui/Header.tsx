@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useLocation } from "wouter";
+
 import { Button } from "./button";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "../../ConnectButton";
 
 const navigation = [{ name: "Product", href: "#" }];
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [_l, setLocation] = useLocation();
 
   return (
     <header className="bg-white">
@@ -35,8 +38,9 @@ export function Header() {
           ))}
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
-          <Button variant={"outline"}>Create Gift</Button>
-          <Button>Create Gift</Button>
+          <Button onClick={() => setLocation("/create-choose-asset")}>
+            Create Gift
+          </Button>
           <ConnectButton />
         </div>
         <div className="flex lg:hidden">
