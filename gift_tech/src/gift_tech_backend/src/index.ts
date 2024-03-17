@@ -13,6 +13,8 @@ import {
 import { getPublicKeyResult } from "./signing";
 import { getTweetContent } from "./tweet";
 
+import { publicKeyToAddress, toHex } from "viem/utils";
+
 /**
  * @todo
  * - [x] add tweet parsing logic
@@ -23,6 +25,7 @@ import { getTweetContent } from "./tweet";
 
 const PublicKey = Record({
   publicKey: blob,
+  address: text,
 });
 
 const Gift = Record({
@@ -40,12 +43,17 @@ type TwitterHandle = text;
 const GIFTS_MAP_ID = 0;
 const usersGiftsState = StableBTreeMap<TwitterHandle, Vec<Gift>>(GIFTS_MAP_ID);
 
+// const POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
+
 /* Canister declaration */
 export default Canister({
   publicKey: update([], PublicKey, async () => {
     const publicKeyResult = await getPublicKeyResult();
+    const address = publicKeyToAddress(toHex(publicKeyResult.public_key));
+
     return {
       publicKey: publicKeyResult.public_key,
+      address,
     };
   }),
   claimGift: update(
