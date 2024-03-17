@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 export interface NFT {
-  key: string;
+  id: string;
   imageUrl?: string;
-  id: bigint;
+  tokenId: bigint;
   contractAddress: `0x${string}`;
 }
 
@@ -20,12 +20,11 @@ export function useNFTs(): NFT[] {
 
     const newNftsState: NFT[] = [];
 
-    // Print contract address and tokenId for each NFT:
     for (const nft of nfts.ownedNfts) {
       newNftsState.push({
-        key: nft.contract.address + nft.tokenId,
+        id: nft.contract.address + nft.tokenId,
         imageUrl: nft.image.pngUrl,
-        id: BigInt(nft.tokenId),
+        tokenId: BigInt(nft.tokenId),
         contractAddress: nft.contract.address as `0x${string}`,
       });
     }

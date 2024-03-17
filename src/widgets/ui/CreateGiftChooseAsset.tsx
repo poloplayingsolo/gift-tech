@@ -1,5 +1,8 @@
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
 import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,9 +12,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useNFTs } from "@/hooks/useNFTs";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const formSchema = z.object({
+  xHandle: z.string(),
+  nftID: z.string(),
+});
 
 export function CreateGiftChooseAsset() {
   const nfts = useNFTs();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("HERE");
+    console.log(values);
+  }
 
   return (
     <div>
@@ -23,41 +49,72 @@ export function CreateGiftChooseAsset() {
               to wrap a claimable gift and send to your friend’s email or X.
             </p>
             <div className="mt-5">
-              <div className="grid w-full items-center gap-1.5">
-                <Label
-                  htmlFor="destination"
-                  className="text-left text-lg font-medium"
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
                 >
-                  Select NFT from your balance
-                </Label>
-                <Select>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Theme" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {nfts.map((nft) => (
-                      <SelectItem key={nft.id} value="light">
-                        <img
-                          width={50}
-                          height={50}
-                          alt={nft.id.toString()}
-                          src={nft.imageUrl}
-                        />
-                        <div> Address: {nft.contractAddress}</div>
-                        <div> ID: {nft.id.toString()}</div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Label
-                  htmlFor="destination"
-                  className="text-left text-lg font-medium"
-                >
-                  Specify destination
-                </Label>
-                <Input placeholder="Example: @GiftTwitter" />
-                <Button className="mt-3">Continue</Button>
-              </div>
+                  <div className="grid w-full items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="nftID"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select NFT from your balance</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} {...field}>
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Theme" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {nfts.map((nft) => (
+                                  <SelectItem key={nft.id} value={nft.id}>
+                                    <img
+                                      width={50}
+                                      height={50}
+                                      alt={nft.id.toString()}
+                                      src={nft.imageUrl}
+                                    />
+                                    <div> Address: {nft.contractAddress}</div>
+                                    <div> ID: {nft.id.toString()}</div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormDescription>
+                            This is your public display name.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="xHandle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Specify destination</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Example: @GiftTwitter"
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            This is your public display name.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button type="submit" className="mt-3">
+                      Continue
+                    </Button>
+                  </div>
+                </form>
+              </Form>
               <p className="text-sm font-light text-muted-foreground mt-5">
                 Made on Internet Computer Chain Key, thus asset will be stored
                 on Polygon smart contract, controlled by ICP blockchain and can
