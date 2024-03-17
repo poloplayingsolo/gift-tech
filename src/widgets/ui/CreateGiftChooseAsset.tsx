@@ -70,10 +70,10 @@ export function CreateGiftChooseAsset() {
                               <SelectContent>
                                 {nfts.map((nft) => (
                                   <SelectItem key={nft.id} value={nft.id}>
-                                    <div className="flex flex-row align-middle">
+                                    <div className="flex flex-row align-left">
                                       <img
-                                        width={75}
-                                        height={75}
+                                        width={50}
+                                        height={50}
                                         alt={nft.id.toString()}
                                         src={nft.imageUrl}
                                       />

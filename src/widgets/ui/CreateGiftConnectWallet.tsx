@@ -6,12 +6,12 @@ export function CreateGiftConnectWallet() {
       <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-[480px]">
         <div className="bg-white shadow sm:rounded-lg">
           <div className="border-b border-gray-200 custom-card px-4 py-5 sm:px-6">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">
+            <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
               Connect Wallet to continue
             </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit quam
-              corrupti consectetur.
+            <p className="leading-7 [&:not(:first-child)]:mt-2">
+              You can use ERC721 token on Polygon blockchain from your balance
+              to wrap a claimable gift and send to your friend’s email or X.
             </p>
             <div className="mt-5">
               <ConnectButton />

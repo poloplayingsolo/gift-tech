@@ -11,8 +11,9 @@ export function CreateGiftCopyLinkPage() {
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
             Create your GIFT
           </h1>
-          <p className="leading-7 [&:not(:first-child)]:mt-6">
-            Short pitch here.
+          <p className="leading-7 [&:not(:first-child)]:mt-6 mx-auto max-w-2xl">
+            My Web3 Bro, now you able to create a gift for your Web2 Normis and
+            make him a new Web3 Bro. Non-custodial, permissionless.
           </p>
           <CreateGiftCopyLink />
           <Partners />
