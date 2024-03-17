@@ -1,19 +1,8 @@
-import { useEffect } from "react";
-import { useAccount } from "wagmi";
-import { useLocation } from "wouter";
 import { Partners } from "@/components/ui/partners";
 import { Header } from "@/components/ui/Header";
-import { ClaimGift } from "@/widgets/ui/ClaimGift";
+import { ClaimGiftPost } from "@/widgets/ui/ClaimGiftPost";
 
-export function ClaimGiftPage() {
-  const account = useAccount();
-  const [_, setLocation] = useLocation();
-
-  useEffect(() => {
-    if (!account.address) return;
-    setLocation("/create-choose-asset");
-  }, [account, setLocation]);
-
+export function ClaimGiftPostPage() {
   return (
     <div className="vh-100">
       <Header />
@@ -25,7 +14,7 @@ export function ClaimGiftPage() {
           <p className="leading-7 [&:not(:first-child)]:mt-6">
             Short pitch here.
           </p>
-          <ClaimGift />
+          <ClaimGiftPost />
           <Partners />
         </div>
       </div>
