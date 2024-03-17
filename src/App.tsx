@@ -1,6 +1,6 @@
 import { Switch, Route } from "wouter";
 
-import { HomePage } from "./pages/CreateGift";
+import { CreateGift } from "./pages/CreateGift";
 import { OtherPage } from "./pages/OtherPage";
 import { CreateGiftPage } from "./prototype/CreateGiftPage";
 import { CreateGiftChooseAssetPage } from "./pages/CreateGiftChooseAssetPage"
@@ -11,8 +11,8 @@ function App() {
   return (
     <div className="p-5">
       <Switch>
-        <Route path="/" component={HomePage} />
-        <Route path="/CreateGiftChooseAssetPage" component={CreateGiftChooseAssetPage} />
+        <Route path="/" component={CreateGift} />
+        <Route path="/create-choose-asset" component={CreateGiftChooseAssetPage} />
         <Route path="/CreateGiftWishesPage" component={CreateGiftWishesPage} />
         <Route path="/CreateGiftCopyLinkPage" component={CreateGiftCopyLinkPage} />
 

@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import { WagmiProvider } from "wagmi";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { mainnet, polygon, optimism, arbitrum, base, zora } from "wagmi/chains";
+import { polygon } from "wagmi/chains";
 
 import App from "./App.tsx";
 
@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       config={getDefaultConfig({
         appName: "gifttech",
         projectId: "2d81615423246e5944454fb8f86d9cb0",
-        chains: [mainnet, polygon, optimism, arbitrum, base, zora],
+        chains: [polygon],
       })}
     >
       <QueryClientProvider client={queryClient}>
