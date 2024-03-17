@@ -5,6 +5,7 @@ import { CreateGiftChooseAssetPage } from "./pages/CreateGiftChooseAssetPage";
 import { CreateGiftWishesPage } from "./pages/CreateGiftWishesPage";
 import { CreateGiftCopyLinkPage } from "./pages/CreateGiftCopyLinkPage";
 import { OnlyConnectedGuard } from "./guards/OnlyConnectedGuard";
+import { ClaimGiftPage } from "./pages/ClaimGiftPage"
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path="/create-wishes" component={CreateGiftWishesPage} />
           <Route path="/create-copy-link" component={CreateGiftCopyLinkPage} />
         </OnlyConnectedGuard>
+
+        <Route path="/ClaimGiftPage" component={ClaimGiftPage} />
 
         <Route>404: No such page!</Route>
       </Switch>

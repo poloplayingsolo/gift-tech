@@ -3,9 +3,9 @@ import { useAccount } from "wagmi";
 import { useLocation } from "wouter";
 import { Partners } from "@/components/ui/partners";
 import { Header } from "@/components/ui/Header";
-import { CreateGiftConnectWallet } from "@/widgets/ui/CreateGiftConnectWallet";
+import { ClaimGift } from "@/widgets/ui/ClaimGift";
 
-export function CreateGift() {
+export function ClaimGiftPage() {
   const account = useAccount();
   const [_, setLocation] = useLocation();
 
@@ -20,12 +20,12 @@ export function CreateGift() {
       <div className="mx-auto w-full items-justify-center center mt-10">
         <div className="text-center">
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-            Create your GIFT
+            Claim your GIFT
           </h1>
           <p className="leading-7 [&:not(:first-child)]:mt-6">
             Short pitch here.
           </p>
-          <CreateGiftConnectWallet />
+          <ClaimGift />
           <Partners />
         </div>
       </div>
