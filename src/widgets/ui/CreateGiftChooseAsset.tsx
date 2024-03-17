@@ -70,22 +70,26 @@ export function CreateGiftChooseAsset() {
                               <SelectContent>
                                 {nfts.map((nft) => (
                                   <SelectItem key={nft.id} value={nft.id}>
-                                    <img
-                                      width={50}
-                                      height={50}
-                                      alt={nft.id.toString()}
-                                      src={nft.imageUrl}
-                                    />
-                                    <div> Address: {nft.contractAddress}</div>
-                                    <div> ID: {nft.id.toString()}</div>
+                                    <div className="flex flex-row align-middle">
+                                      <img
+                                        width={75}
+                                        height={75}
+                                        alt={nft.id.toString()}
+                                        src={nft.imageUrl}
+                                      />
+                                      <div className="ml-2">
+                                        <p className="font-medium text-md leading-5">
+                                          {" "}
+                                          Address:<br /> {nft.contractAddress}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground"> ID: {nft.id.toString()}</p>
+                                      </div>
+                                    </div>
                                   </SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
                           </FormControl>
-                          <FormDescription>
-                            This is your public display name.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -94,7 +98,7 @@ export function CreateGiftChooseAsset() {
                       control={form.control}
                       name="xHandle"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="mt-3">
                           <FormLabel>Specify destination</FormLabel>
                           <FormControl>
                             <Input
@@ -102,9 +106,6 @@ export function CreateGiftChooseAsset() {
                               placeholder="Example: @GiftTwitter"
                             />
                           </FormControl>
-                          <FormDescription>
-                            This is your public display name.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
