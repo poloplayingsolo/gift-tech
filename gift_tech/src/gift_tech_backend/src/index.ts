@@ -8,34 +8,21 @@ import {
   Record,
   StableBTreeMap,
   ic,
-  Some,
-  Principal,
-  None,
   nat,
 } from "azle";
 
+import { toHex } from "viem/utils";
+import { computeAddress } from "ethers";
+
 import { getPublicKeyResult } from "./signing";
 import { getTweetContent } from "./tweet";
-
-import { publicKeyToAddress, toHex } from "viem/utils";
-
-import { computeAddress } from "ethers";
-import { managementCanister } from "azle/canisters/management";
-import { prepareTransaction } from "./tranasction";
 import { getTransactionCount } from "./rpc";
-
-/**
- * @todo
- * - [x] add tweet parsing logic
- * - [x] add transaction signing logic
- * - add rpc send_raw_tx logic
- */
+import { prepareTransaction } from "./tranasction";
 
 const PublicKey = Record({
   publicKey: blob,
   publicKeyString: text,
   address: text,
-  addressFromEthers: text,
 });
 
 const Gift = Record({
@@ -55,25 +42,23 @@ const usersGiftsState = StableBTreeMap<TwitterHandle, Vec<Gift>>(GIFTS_MAP_ID);
 
 /* Canister declaration */
 export default Canister({
-  prepareTx: update([], text, async () => {
-    return prepareTransaction(
-      "0x42B28394076DDa20137485da77E59387e14D922D",
-      "0xDc70E66794fE4879eb59DF344110AD93AfB0AeBa",
-      "2"
-    );
-  }),
+  // prepareTx: update([], text, async () => {
+  //   return prepareTransaction(
+  //     "0x42B28394076DDa20137485da77E59387e14D922D",
+  //     "0xDc70E66794fE4879eb59DF344110AD93AfB0AeBa",
+  //     "2"
+  //   );
+  // }),
   transactionCount: update([text], nat, async (address) => {
     return BigInt(await getTransactionCount(address as `0x${string}`));
   }),
   publicKey: update([], PublicKey, async () => {
     const publicKeyResult = await getPublicKeyResult();
-    const address = publicKeyToAddress(toHex(publicKeyResult.public_key));
 
     return {
       publicKey: publicKeyResult.public_key,
       publicKeyString: toHex(publicKeyResult.public_key),
-      address,
-      addressFromEthers: computeAddress(toHex(publicKeyResult.public_key)),
+      address: computeAddress(toHex(publicKeyResult.public_key)),
     };
   }),
   claimGift: update(
@@ -98,9 +83,11 @@ export default Canister({
         return ic.trap("No such gift for this user");
       }
 
-      /* Implement transaction signing and send of the gift here... */
-
-      return `Sending Gift to ${receiverAddress}: ${giftToClaim.message}, ${giftToClaim.tokenAddress}, ${giftToClaim.tokenId}`; //tx hash
+      return prepareTransaction(
+        receiverAddress as `0x${string}`,
+        giftToClaim.tokenAddress as `0x${string}`,
+        giftToClaim.tokenId
+      );
     }
   ),
   createGift: update(
