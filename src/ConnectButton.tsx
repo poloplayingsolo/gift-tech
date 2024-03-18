@@ -9,8 +9,6 @@ export function ConnectButton() {
         chain,
         authenticationStatus,
         mounted,
-        openAccountModal,
-        openChainModal,
         openConnectModal,
       }: any) => {
         // Note: If your app doesn't use authentication, you
