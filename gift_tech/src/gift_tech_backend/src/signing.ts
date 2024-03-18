@@ -1,7 +1,9 @@
 import { ic, None } from "azle";
 import { managementCanister } from "azle/canisters/management";
 
-const keyName = "dfx_test_key";
+// const keyName = "dfx_test_key";
+
+const keyName = "key_1";
 
 export async function getPublicKeyResult() {
   const caller = ic.caller().toUint8Array();

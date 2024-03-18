@@ -1,1 +1,1 @@
-{"canister_methods":{"queries":[],"updates":[{"name":"prepareTx"},{"name":"transactionCount"},{"name":"publicKey"},{"name":"claimGift"},{"name":"createGift"}],"callbacks":{}}}
+{"canister_methods":{"queries":[],"updates":[{"name":"transactionCount"},{"name":"publicKey"},{"name":"claimGift"},{"name":"createGift"}],"callbacks":{}}}
