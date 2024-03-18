@@ -1,0 +1,5 @@
+service: () -> {
+    claimGift: (text, text) -> (text);
+    createGift: (text, text, text, nat64) -> (record {tokenId:nat64; tokenAddress:text; createdAt:nat64; message:text; receiver:text});
+    publicKey: () -> (record {publicKey:vec nat8});
+}
