@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLocation, useSearch } from "wouter";
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@/ConnectButton";
 
 const formSchema = z.object({
   postURL: z
@@ -71,6 +72,7 @@ export function ClaimGiftPost() {
                 <div className="grid w-full items-center gap-1.5">
                   <Button
                     className="mt-7 shadow-none"
+                    disabled={!account.isConnected}
                     variant={"outline"}
                     onClick={() => {
                       const text = `I am claiming gift to ${account.address}`;
@@ -81,8 +83,9 @@ export function ClaimGiftPost() {
                       );
                     }}
                   >
-                    Post Tweet <img className="inline ml-1" src="/x.svg" />
+                    Post Tweet <img alt="post-tweet" className="inline ml-1" src="/x.svg" />
                   </Button>
+                  {!account.isConnected && <ConnectButton />}
                 </div>
               </div>
               <Form {...form}>
