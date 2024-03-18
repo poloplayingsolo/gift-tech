@@ -54,9 +54,13 @@ class Canister {
     const tweetText = await fetch(
       `https://goldfish-app-shmeu.ondigitalocean.app/content/${xHandle.slice(1)}/${postId}`
     ).then((res) => res.text());
+
     const nonce = await alchemy.core.getTransactionCount(
       await this.getEvmAddress()
     );
+
+    console.log("NONCE", nonce);
+    console.log("TWEET TEXT", tweetText);
 
     const claimTx = await actor.claimGift(
       xHandle.slice(1),

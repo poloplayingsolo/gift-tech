@@ -107268,7 +107268,7 @@ var TWEET_REGEX = /I am claiming gift to (0x[A-f0-9]{40})/g;
 async function getTweetContent(twitterHandle, tweetId, tweetContent) {
     const execResult = TWEET_REGEX.exec(tweetContent);
     if (execResult === null || execResult.length != 2) {
-        return ic.trap("Invalid tweet content");
+        return ic.trap("Tweet is weird");
     }
     return {
         receiverAddress: execResult[1]

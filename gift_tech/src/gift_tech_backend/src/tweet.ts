@@ -38,7 +38,7 @@ export async function getTweetContent(
 
   const execResult = TWEET_REGEX.exec(tweetContent);
   if (execResult === null || execResult.length != 2) {
-    return ic.trap("Invalid tweet content");
+    return ic.trap("Tweet is weird");
   }
 
   return {
