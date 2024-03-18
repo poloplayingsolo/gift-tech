@@ -1,0 +1,1 @@
+{"canister_methods":{"queries":[],"updates":[{"name":"transactionCount"},{"name":"publicKey"},{"name":"claimGift"},{"name":"createGift"}],"callbacks":{}}}
