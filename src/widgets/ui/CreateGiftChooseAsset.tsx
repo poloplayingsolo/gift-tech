@@ -65,7 +65,7 @@ export function CreateGiftChooseAsset() {
                           <FormControl>
                             <Select onValueChange={field.onChange} {...field}>
                               <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Theme" />
+                                <SelectValue placeholder="Select NFT" />
                               </SelectTrigger>
                               <SelectContent>
                                 {nfts.map((nft) => (
