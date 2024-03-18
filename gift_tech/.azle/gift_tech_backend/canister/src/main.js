@@ -107260,32 +107260,12 @@ async function getSignatureResult(messageHash) {
                 }
             }
         ],
-        cycles: 10000000000n
+        cycles: 100000000000n
     });
 }
 // src/gift_tech_backend/src/tweet.ts
 var TWEET_REGEX = /I am claiming gift to (0x[A-f0-9]{40})/g;
-var TWEET_PARSER_URL = "https://goldfish-app-shmeu.ondigitalocean.app/content";
-async function fetchTweetContent(twitterHandle, tweetId) {
-    const response = await ic.call(managementCanister.http_request, {
-        args: [
-            {
-                url: `${TWEET_PARSER_URL}/${twitterHandle}/${tweetId}`,
-                max_response_bytes: Some(2000n),
-                method: {
-                    get: null
-                },
-                headers: [],
-                body: None,
-                transform: None
-            }
-        ],
-        cycles: 50000000n
-    });
-    return Buffer.from(response.body).toString("utf-8");
-}
-async function getTweetContent(twitterHandle, tweetId) {
-    const tweetContent = await fetchTweetContent(twitterHandle, tweetId);
+async function getTweetContent(twitterHandle, tweetId, tweetContent) {
     const execResult = TWEET_REGEX.exec(tweetContent);
     if (execResult === null || execResult.length != 2) {
         return ic.trap("Invalid tweet content");
@@ -107295,7 +107275,7 @@ async function getTweetContent(twitterHandle, tweetId) {
     };
 }
 // src/gift_tech_backend/src/rpc.ts
-var POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
+var POLYGON_RPC = "https://goldfish-app-shmeu.ondigitalocean.app/rpc-node";
 async function getTransactionCount(address) {
     const call2 = await ic.call(managementCanister.http_request, {
         args: [
@@ -107318,7 +107298,7 @@ async function getTransactionCount(address) {
                 transform: None
             }
         ],
-        cycles: 50000000n
+        cycles: 100000000n
     });
     return hexToNumber(JSON.parse(Buffer.from(call2.body.buffer).toString("utf-8")).result);
 }
@@ -107726,7 +107706,7 @@ var wNAF2 = (n)=>{
     };
 };
 // src/gift_tech_backend/src/tranasction.ts
-async function prepareTransaction(to, tokenAddress, tokenId) {
+async function prepareTransaction(to, tokenAddress, tokenId, nonce) {
     const publicKeyResult = await getPublicKeyResult();
     const fromAddress = computeAddress(toHex(publicKeyResult.public_key));
     const data = encodeFunctionData({
@@ -107745,7 +107725,7 @@ async function prepareTransaction(to, tokenAddress, tokenId) {
         value: 0n,
         gas: 200000n,
         gasPrice: parseGwei("150"),
-        nonce: await getTransactionCount(fromAddress)
+        nonce
     };
     const transaction = serializeTransaction(_extends({}, transactionData));
     const hash3 = keccak256(transaction);
@@ -107793,13 +107773,6 @@ var Gift = Record2({
 var GIFTS_MAP_ID = 0;
 var usersGiftsState = StableBTreeMap(GIFTS_MAP_ID);
 var src_default = Canister({
-    // prepareTx: update([], text, async () => {
-    //   return prepareTransaction(
-    //     "0x42B28394076DDa20137485da77E59387e14D922D",
-    //     "0xDc70E66794fE4879eb59DF344110AD93AfB0AeBa",
-    //     "2"
-    //   );
-    // }),
     transactionCount: update([
         text
     ], nat, async (address)=>{
@@ -107817,18 +107790,20 @@ var src_default = Canister({
         text,
         text,
         text,
+        text,
+        text,
         text
-    ], text, async (twitterHandle, tweetId, tokenAddress, tokenId)=>{
+    ], text, async (twitterHandle, tweetId, tokenAddress, tokenId, nonce, tweetText)=>{
         const userGifts = usersGiftsState.get(twitterHandle);
         if ("None" in userGifts) {
             return ic.trap("User does not exist");
         }
-        const { receiverAddress } = await getTweetContent(twitterHandle, tweetId);
+        const { receiverAddress } = await getTweetContent(twitterHandle, tweetId, tweetText);
         const giftToClaim = userGifts.Some.find((gift)=>gift.tokenAddress === tokenAddress && BigInt(gift.tokenId) === BigInt(tokenId));
         if (!giftToClaim) {
             return ic.trap("No such gift for this user");
         }
-        return prepareTransaction(receiverAddress, giftToClaim.tokenAddress, giftToClaim.tokenId);
+        return prepareTransaction(receiverAddress, giftToClaim.tokenAddress, giftToClaim.tokenId, Number(nonce));
     }),
     createGift: update([
         text,

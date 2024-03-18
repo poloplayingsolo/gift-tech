@@ -9,8 +9,7 @@ export { idlFactory } from "./gift_tech_backend.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId =
-  process.env.CANISTER_ID_GIFT_TECH_BACKEND;
+export const canisterId = "35fg3-taaaa-aaaak-afpza-cai";
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -22,7 +21,7 @@ export const createActor = (canisterId, options = {}) => {
   }
 
   // Fetch root key for certificate validation during development
-  if (process.env.DFX_NETWORK !== "ic") {
+  if ("ic" !== "ic") {
     agent.fetchRootKey().catch((err) => {
       console.warn(
         "Unable to fetch root key. Check to ensure that your local replica is running"
@@ -39,4 +38,6 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const gift_tech_backend = canisterId ? createActor(canisterId) : undefined;
+export const gift_tech_backend = canisterId
+  ? createActor(canisterId)
+  : undefined;

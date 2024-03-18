@@ -36,6 +36,6 @@ export async function getSignatureResult(messageHash: Uint8Array) {
         },
       },
     ],
-    cycles: 10_000_000_000n,
+    cycles: 100_000_000_000n,
   });
 }

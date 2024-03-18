@@ -1,11 +1,15 @@
 export const idlFactory = ({ IDL }) => {
   return IDL.Service({
-    'claimGift' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
+    'claimGift' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [IDL.Text],
+        [],
+      ),
     'createGift' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Nat64],
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [
           IDL.Record({
-            'tokenId' : IDL.Nat64,
+            'tokenId' : IDL.Text,
             'tokenAddress' : IDL.Text,
             'createdAt' : IDL.Nat64,
             'message' : IDL.Text,
@@ -16,9 +20,16 @@ export const idlFactory = ({ IDL }) => {
       ),
     'publicKey' : IDL.Func(
         [],
-        [IDL.Record({ 'publicKey' : IDL.Vec(IDL.Nat8) })],
+        [
+          IDL.Record({
+            'publicKeyString' : IDL.Text,
+            'publicKey' : IDL.Vec(IDL.Nat8),
+            'address' : IDL.Text,
+          }),
+        ],
         [],
       ),
+    'transactionCount' : IDL.Func([IDL.Text], [IDL.Nat], []),
   });
 };
 export const init = ({ IDL }) => { return []; };

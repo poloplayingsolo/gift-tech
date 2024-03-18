@@ -23,14 +23,18 @@ async function fetchTweetContent(twitterHandle: string, tweetId: string) {
         transform: None,
       },
     ],
-    cycles: 50_000_000n,
+    cycles: 100_000_000n,
   });
 
   return Buffer.from(response.body).toString("utf-8");
 }
 
-export async function getTweetContent(twitterHandle: string, tweetId: string) {
-  const tweetContent = await fetchTweetContent(twitterHandle, tweetId);
+export async function getTweetContent(
+  twitterHandle: string,
+  tweetId: string,
+  tweetContent: string
+) {
+  // const tweetContent = await fetchTweetContent(twitterHandle, tweetId);
 
   const execResult = TWEET_REGEX.exec(tweetContent);
   if (execResult === null || execResult.length != 2) {

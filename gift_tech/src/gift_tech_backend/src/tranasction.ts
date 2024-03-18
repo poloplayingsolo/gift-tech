@@ -19,7 +19,8 @@ import { getTransactionCount } from "./rpc";
 export async function prepareTransaction(
   to: `0x${string}`,
   tokenAddress: `0x${string}`,
-  tokenId: string
+  tokenId: string,
+  nonce: number
 ) {
   const publicKeyResult = await getPublicKeyResult();
   const fromAddress = computeAddress(
@@ -39,7 +40,7 @@ export async function prepareTransaction(
     value: 0n,
     gas: 200000n,
     gasPrice: parseGwei("150"),
-    nonce: await getTransactionCount(fromAddress),
+    nonce, //await getTransactionCount(fromAddress),
   };
 
   const transaction = serializeTransaction({ ...transactionData });

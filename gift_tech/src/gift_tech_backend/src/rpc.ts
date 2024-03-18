@@ -2,7 +2,7 @@ import { None, Some, ic } from "azle";
 import { managementCanister } from "azle/canisters/management";
 import { hexToNumber } from "viem";
 
-const POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
+const POLYGON_RPC = "https://goldfish-app-shmeu.ondigitalocean.app/rpc-node";
 
 export async function getTransactionCount(address: `0x${string}`) {
   const call = await ic.call(managementCanister.http_request, {
@@ -28,7 +28,7 @@ export async function getTransactionCount(address: `0x${string}`) {
         transform: None,
       },
     ],
-    cycles: 50_000_000n,
+    cycles: 100_000_000n,
   });
 
   return hexToNumber(

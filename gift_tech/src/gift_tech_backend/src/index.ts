@@ -42,13 +42,6 @@ const usersGiftsState = StableBTreeMap<TwitterHandle, Vec<Gift>>(GIFTS_MAP_ID);
 
 /* Canister declaration */
 export default Canister({
-  // prepareTx: update([], text, async () => {
-  //   return prepareTransaction(
-  //     "0x42B28394076DDa20137485da77E59387e14D922D",
-  //     "0xDc70E66794fE4879eb59DF344110AD93AfB0AeBa",
-  //     "2"
-  //   );
-  // }),
   transactionCount: update([text], nat, async (address) => {
     return BigInt(await getTransactionCount(address as `0x${string}`));
   }),
@@ -62,16 +55,20 @@ export default Canister({
     };
   }),
   claimGift: update(
-    [text, text, text, text],
+    [text, text, text, text, text, text],
     text,
-    async (twitterHandle, tweetId, tokenAddress, tokenId) => {
+    async (twitterHandle, tweetId, tokenAddress, tokenId, nonce, tweetText) => {
       const userGifts = usersGiftsState.get(twitterHandle);
 
       if ("None" in userGifts) {
         return ic.trap("User does not exist");
       }
 
-      const { receiverAddress } = await getTweetContent(twitterHandle, tweetId);
+      const { receiverAddress } = await getTweetContent(
+        twitterHandle,
+        tweetId,
+        tweetText
+      );
 
       const giftToClaim = userGifts.Some.find(
         (gift) =>
@@ -86,7 +83,8 @@ export default Canister({
       return prepareTransaction(
         receiverAddress as `0x${string}`,
         giftToClaim.tokenAddress as `0x${string}`,
-        giftToClaim.tokenId
+        giftToClaim.tokenId,
+        Number(nonce)
       );
     }
   ),
